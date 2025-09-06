@@ -1,6 +1,88 @@
 # python 基础
 
+## 全局变量与global关键字
 
+**Python 全局变量与global关键字**
+
+ 在Python的变量使用中，经常会遇到这样的错误:
+
+```python
+local variable 'a' referenced before assignment
+```
+
+它的意思是：局部变量“a”在赋值前就被引用了。
+比如运行下面的代码就会出现这样的问题：
+
+```python
+a = 3
+def Fuc():
+    print (a)
+    a = a + 1
+Fuc()
+```
+
+ 但是如果把 *a = a + 1* 这一句删除又不会出现上述问题了
+
+```python
+a = 3
+def Fuc():
+    print (a)
+Fuc()
+```
+
+原来，在Python中，a=3 定义了全局变量a，作用域从定义处到代码结束，在 a=3 以下的函数中是可以引用全局变量a的，但如果要修改函数中与全局变量同名的变量，则函数中的该变量就会变成局部变量，在修改之前对该变量的引用自然会出现未分配或未定义的错误了。
+
+ 如果确定要引用并修改全局变量必须加上global关键字
+
+```python
+a = 3
+def Fuc():
+	global a
+    print (a)
+    a=a+1
+Fuc()
+```
+
+原来，在Python中，a=3 定义了全局变量a，作用域从定义处到代码结束，在 a=3 以下的函数中是可以引用全局变量a的，但如果要修改函数中与全局变量同名的变量，则函数中的该变量就会变成局部变量，在修改之前对该变量的引用自然会出现未分配或未定义的错误了。
+
+ 如果确定要引用并修改全局变量必须加上global关键字
+
+```python
+a = 3
+def Fuc():
+	global a
+    print (a)
+    a=a+1
+Fuc()
+```
+
+ 注意要领：哪个函数需要修改全局变量，在函数中声明一下即可。
+
+ 但在 if _*name*_ == “**main**”：下，全局变量是一直保持的
+
+```python
+a = 3
+def Fuc():
+    global a
+    print (a)  # 1
+    a = a + 1
+if __name__ == "__main__":
+    print (a)  # 2
+    a = a + 1
+    Fuc()
+    print (a)  # 3
+
+```
+
+ 输出如下（Python3环境下）：
+
+```python
+3
+4
+5
+```
+
+三个print执行的顺序为：2, 1, 3 。
 
 ## 字典(Dictionary)
 
@@ -834,6 +916,45 @@ type(B()) == A        # returns False
 
 
 
+## classmethod()	
+
+@classmethod 是 Python 中的一个装饰器，用于定义类方法。以下是它的主要特点：
+基本概念
+
+- 类方法：属于类本身而不是类实例的方法
+- 第一个参数：自动接收类对象（通常命名为 cls），而不是实例对象（self）
+
+主要用途
+
+- 访问类属性：可以访问和修改类级别的数据
+- 创建替代构造器：提供不同的方式来创建类实例
+- 工具方法：执行与类相关但不依赖具体实例的操作
+
+### 示例
+
+```python
+class A(object):
+    bar = 1
+    def func1(self):  
+        print ('foo') 
+    @classmethod
+    def func2(cls):
+        print ('func2')
+        print (cls.bar)
+        cls().func1()   # 调用 foo 方法
+
+A.func2()               # 不需要实例化
+```
+
+>当使用 @classmethod 装饰一个方法时：
+>
+>- cls 参数代表类本身（不是类的实例）
+>- cls() 相当于调用类的构造函数，创建该类的一个新实例
+
+
+
+
+
 # 理解布尔值与假值元素
 
 ### 什么元素为假？
@@ -1001,6 +1122,28 @@ class Animal(object):
 >>> Animal.run(dog)
 小黑 跑起来了
 ```
+
+
+
+# if __ name  __ == '__ main __'
+
+```
+if __name__ == '__main__': 属于 Python 的标准模块执行保护机制。
+让我详细解释它的含义和作用：
+1. 基本概念
+这是一种 Python 约定，用于区分模块是被直接运行还是被导入到其他模块中。
+2. 工作原理
+当 Python 文件被直接执行时（如 python agent_fastapi_server.py），__name__ 变量的值为 '__main__'
+当 Python 文件被作为模块导入时（如 import agent_fastapi_server），__name__ 变量的值为模块名（如 'agent_fastapi_server'）
+```
+
+
+
+
+
+
+
+
 
 
 
